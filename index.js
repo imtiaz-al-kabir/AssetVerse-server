@@ -5,6 +5,7 @@ import express from "express";
 import mongoose from "mongoose";
 import authRoutes from "./routes/authRoutes.js";
 import employeeRoutes from "./routes/employeeRoutes.js";
+import assetRoutes from "./routes/assetRoutes.js"
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -16,6 +17,7 @@ app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(cookieParser());
 app.use("/users", authRoutes);
 app.use("/employees", employeeRoutes);
+app.use('/assets', assetRoutes);
 
 const connectDB = async () => {
   try {
