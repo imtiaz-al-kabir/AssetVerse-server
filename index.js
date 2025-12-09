@@ -3,9 +3,10 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
+import assetRoutes from "./routes/assetRoutes.js";
+import assignedAssetRoutes from "./routes/assignedAssetRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import employeeRoutes from "./routes/employeeRoutes.js";
-import assetRoutes from "./routes/assetRoutes.js"
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,8 +18,8 @@ app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(cookieParser());
 app.use("/users", authRoutes);
 app.use("/employees", employeeRoutes);
-app.use('/assets', assetRoutes);
-
+app.use("/assets", assetRoutes);
+app.use("/assigned-assets", assignedAssetRoutes);
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
