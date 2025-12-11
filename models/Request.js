@@ -54,7 +54,7 @@ const requestSchema = new mongoose.Schema(
       type: String,
     },
     processedBy: {
-      type: String, // HR email
+      type: String, 
     },
   },
   {

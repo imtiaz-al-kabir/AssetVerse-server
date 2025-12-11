@@ -29,8 +29,8 @@ router.post("/create-checkout-session", async (req, res) => {
                 },
             ],
             mode: "payment",
-            success_url: `${process.env.CLIENT_URL || 'http://localhost:5173'}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${process.env.CLIENT_URL || 'http://localhost:5173'}/subscription`,
+            success_url: `${process.env.CLIENT_URL || 'https://asseetverse.netlify.app'}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${process.env.CLIENT_URL || 'https://asseetverse.netlify.app'}/subscription`,
             customer_email: hrEmail,
             metadata: {
                 hrEmail,

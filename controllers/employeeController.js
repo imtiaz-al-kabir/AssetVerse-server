@@ -8,7 +8,7 @@ export const getMyTeam = async (req, res) => {
   try {
     const team = await EmployeeAffiliation.find({ hrId: req.user._id });
 
-    // Populate employee images from User model if not already present
+   
     const teamWithImages = await Promise.all(
       team.map(async (member) => {
         if (!member.employeeImage) {
