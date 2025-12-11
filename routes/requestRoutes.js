@@ -4,14 +4,14 @@ import {
   getRequests,
   updateRequestStatus,
 } from "../controllers/requestController.js";
-import { admin, protect } from "../middleware/authMiddleware.js";
+import { protect, verifyHR } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.route("/").post(protect, createRequest).get(protect, admin, getRequests);
+router.route("/").post(protect, createRequest).get(protect, verifyHR, getRequests);
 
 router.route("/myrequests").get(protect, getRequests);
 
-router.route("/:id").put(protect, admin, updateRequestStatus);
+router.route("/:id").put(protect, verifyHR, updateRequestStatus);
 
 export default router;

@@ -15,6 +15,10 @@ const requestSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    requestType: {
+      type: String,
+      default: "Request",
+    },
     requesterName: {
       type: String,
       required: true,

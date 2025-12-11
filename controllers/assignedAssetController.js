@@ -1,12 +1,13 @@
 import AssignedAsset from "../models/AssignedAsset.js";
 
-// @desc    Get current user's assigned assets
+// @desc    Get current user's assigned assets with pagination
 // @route   GET /api/assigned-assets
 // @access  Private
 export const getMyAssets = async (req, res) => {
   try {
-    const { search, type } = req.query;
-    let filter = { employeeEmail: req.user.email };
+    const { search, type, page = 1, limit = 5 } = req.query;
+
+    const filter = { employeeEmail: req.user.email };
 
     if (search) {
       filter.assetName = { $regex: search, $options: "i" };
@@ -16,10 +17,24 @@ export const getMyAssets = async (req, res) => {
       filter.assetType = type;
     }
 
-    const assets = await AssignedAsset.find(filter).sort({
-      assignmentDate: -1,
+    const skip = (page - 1) * limit;
+
+    // Count total documents for pagination
+    const totalItems = await AssignedAsset.countDocuments(filter);
+    const totalPages = Math.ceil(totalItems / limit);
+
+    // Fetch paginated data
+    const assets = await AssignedAsset.find(filter)
+      .sort({ assignmentDate: -1 })
+      .skip(skip)
+      .limit(Number(limit));
+
+    res.json({
+      assets,
+      totalPages,
+      totalItems,
+      currentPage: Number(page),
     });
-    res.json(assets);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

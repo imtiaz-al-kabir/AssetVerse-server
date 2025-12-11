@@ -5,15 +5,15 @@ import {
   getAssets,
   updateAsset,
 } from "../controllers/assetController.js";
-import { admin, protect } from "../middleware/authMiddleware.js";
+import { protect, verifyHR } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.route("/").get(protect, getAssets).post(protect, admin, createAsset);
+router.route("/").get(protect, getAssets).post(protect, verifyHR, createAsset);
 
 router
   .route("/:id")
-  .put(protect, admin, updateAsset)
-  .delete(protect, admin, deleteAsset);
+  .put(protect, verifyHR, updateAsset)
+  .delete(protect, verifyHR, deleteAsset);
 
 export default router;

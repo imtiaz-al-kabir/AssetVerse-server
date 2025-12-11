@@ -8,7 +8,9 @@ import assignedAssetRoutes from "./routes/assignedAssetRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import employeeRoutes from "./routes/employeeRoutes.js";
 import requestRoutes from "./routes/requestRoutes.js";
-import statsRoutes from "./routes/statsRoutes.js"
+import statsRoutes from "./routes/statsRoutes.js";
+import paymentRoutes from "./routes/paymentRoutes.js";
+import packageRoutes from "./routes/packageRoutes.js";
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -24,6 +26,8 @@ app.use("/assets", assetRoutes);
 app.use("/requests", requestRoutes);
 app.use("/assigned-assets", assignedAssetRoutes);
 app.use('/stats', statsRoutes);
+app.use('/payments', paymentRoutes);
+app.use('/packages', packageRoutes);
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);

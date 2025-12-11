@@ -30,6 +30,7 @@ export const createRequest = async (req, res) => {
       hrEmail: asset.hrEmail, // The HR owning the asset
       companyName: asset.companyName,
       requestStatus: "pending",
+      requestType: requestType || "Request",
       note,
     });
 
