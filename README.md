@@ -292,11 +292,11 @@ GET    /packages              # Get all packages
 
 ### Test Credentials
 **HR Manager:**
-- Email: hr@testcompany.com
+- Email: hr@gmail.com
 - Password: Test@123
 
 **Employee:**
-- Email: employee@test.com
+- Email: employee@gmail.com
 - Password: Test@123
 
 ## 🚀 Deployment
