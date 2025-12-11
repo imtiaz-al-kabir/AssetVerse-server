@@ -1,9 +1,7 @@
 import Asset from '../models/Asset.js';
 import User from '../models/User.js';
 
-// @desc    Get assets (HR sees own, Employee sees all or filtered)
-// @route   GET /api/assets
-// @access  Private (Advanced filter for HR/Employee)
+
 export const getAssets = async (req, res) => {
     try {
         const { search, type, limit = 10, page = 1 } = req.query;
@@ -16,9 +14,7 @@ export const getAssets = async (req, res) => {
         if (req.user.role === 'hr') {
             filter.hrEmail = req.user.email;
         }
-        // If I am Employee, I can search/see all available assets (for request feed)
-        // OR filtering logic can be added here if employees should only see affiliated companies
-        // For 'Request Asset' feed (all companies), no restriction on hrEmail.
+        
 
         // Search logic
         if (search) {
@@ -30,10 +26,7 @@ export const getAssets = async (req, res) => {
             filter.productType = type;
         }
 
-        // Available only filter (optional, maybe for employee view)
-        // if (req.user.role === 'employee') {
-        //    filter.availableQuantity = { $gt: 0 };
-        // }
+ 
 
         const assets = await Asset.find(filter)
             .sort({ createdAt: -1 })
@@ -54,9 +47,6 @@ export const getAssets = async (req, res) => {
 };
 
 
-// @desc    Create new asset
-// @route   POST /api/assets
-// @access  Private (HR only)
 export const createAsset = async (req, res) => {
     try {
         const { productName, productType, productQuantity, productImage } = req.body;
@@ -64,8 +54,8 @@ export const createAsset = async (req, res) => {
         const asset = new Asset({
             productName,
             productType,
-            productQuantity, // Total
-            availableQuantity: productQuantity, // Initially same as total
+            productQuantity, 
+            availableQuantity: productQuantity, 
             productImage,
             hrEmail: req.user.email,
             companyName: req.user.companyName,
@@ -78,9 +68,7 @@ export const createAsset = async (req, res) => {
     }
 };
 
-// @desc    Delete asset
-// @route   DELETE /api/assets/:id
-// @access  Private (HR only)
+
 export const deleteAsset = async (req, res) => {
     try {
         const asset = await Asset.findById(req.params.id);
@@ -96,9 +84,7 @@ export const deleteAsset = async (req, res) => {
     }
 };
 
-// @desc    Update asset
-// @route   PUT /api/assets/:id
-// @access  Private (HR only)
+
 export const updateAsset = async (req, res) => {
     try {
         const { productName, productType, productQuantity, productImage } = req.body;
@@ -109,8 +95,7 @@ export const updateAsset = async (req, res) => {
             asset.productType = productType || asset.productType;
             asset.productImage = productImage || asset.productImage;
 
-            // Logic for quantity update if needed?
-            // Simple override for now. Ideally should calc difference for availableQuantity
+          
             if (productQuantity !== undefined) {
                 const diff = productQuantity - asset.productQuantity;
                 asset.productQuantity = productQuantity;

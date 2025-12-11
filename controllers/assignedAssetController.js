@@ -1,8 +1,6 @@
 import AssignedAsset from "../models/AssignedAsset.js";
 
-// @desc    Get current user's assigned assets with pagination
-// @route   GET /api/assigned-assets
-// @access  Private
+
 export const getMyAssets = async (req, res) => {
   try {
     const { search, type, page = 1, limit = 5 } = req.query;

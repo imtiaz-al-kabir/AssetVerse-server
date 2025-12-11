@@ -3,7 +3,7 @@ import Package from "../models/Package.js";
 
 const router = express.Router();
 
-// Get all packages
+
 router.get("/", async (req, res) => {
     try {
         const packages = await Package.find();

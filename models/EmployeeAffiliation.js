@@ -37,7 +37,7 @@ const employeeAffiliationSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      default: "active", // 'active', 'inactive'
+      default: "active", 
     },
   },
   {

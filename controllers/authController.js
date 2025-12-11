@@ -49,9 +49,9 @@ export const registerUser = async (req, res) => {
       }
       userData.companyName = companyName;
       userData.companyLogo = companyLogo;
-      userData.packageLimit = 5; // Default basic package
+      userData.packageLimit = 5;
       userData.currentEmployees = 0;
-      userData.subscription = "basic";
+      userData.subscription = "free";
     }
 
     const user = await User.create(userData);
@@ -60,9 +60,9 @@ export const registerUser = async (req, res) => {
       const token = generateToken(user._id);
       res.cookie("jwt", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV !== "development", // Use secure cookies in production
-        sameSite: "strict", // Prevent CSRF attacks
-        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+        secure: process.env.NODE_ENV !== "development",
+        sameSite: "strict",
+        maxAge: 30 * 24 * 60 * 60 * 1000,
       });
 
       res.status(201).json({
@@ -123,13 +123,13 @@ export const logoutUser = (req, res) => {
 
 export const getCurrentUser = async (req, res) => {
   try {
-    const token = req.cookies.jwt; // get token from cookie
+    const token = req.cookies.jwt;
     if (!token) {
       return res.status(401).json({ message: "Not authenticated" });
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.id).select("-password"); // exclude password
+    const user = await User.findById(decoded.id).select("-password");
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -147,11 +147,10 @@ export const updateUserProfile = async (req, res) => {
     user.name = req.body.name || user.name;
     user.profileImage = req.body.profileImage || user.profileImage;
 
-    // HR Company logo update? Optional requirement says yes.
+
     if (user.role === "hr" && req.body.companyLogo) {
       user.companyLogo = req.body.companyLogo;
-      // Should verify if we need to update this on all Affiliated records too?
-      // "Updated company logo" requirement.
+
     }
 
     const updatedUser = await user.save();
@@ -164,7 +163,7 @@ export const updateUserProfile = async (req, res) => {
       profileImage: updatedUser.profileImage,
       companyName: updatedUser.companyName,
       companyLogo: updatedUser.companyLogo,
-      // ... other fields
+
     });
   } else {
     res.status(404);

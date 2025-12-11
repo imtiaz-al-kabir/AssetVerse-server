@@ -39,7 +39,7 @@ const assetSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true, // Auto createdAt/updatedAt
+    timestamps: true, 
   }
 );
 

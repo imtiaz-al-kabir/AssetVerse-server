@@ -55,7 +55,7 @@ router.post("/payment-success", async (req, res) => {
         if (session.payment_status === 'paid') {
             const { hrEmail, packageName, employeeLimit, price } = session.metadata;
 
-            // Check if payment already recorded to avoid duplicates (optional, based on transactionId)
+
             const existingPayment = await Payment.findOne({ transactionId: session.payment_intent });
             if (existingPayment) {
                 return res.json({ status: "already_processed" });
@@ -67,14 +67,15 @@ router.post("/payment-success", async (req, res) => {
                 employeeLimit: parseInt(employeeLimit),
                 amount: parseFloat(price),
                 transactionId: session.payment_intent,
-                status: 'Success'
+                status: 'completed'
             });
 
             // Update user package limit
             const filter = { email: hrEmail };
             const updateDoc = {
                 $set: {
-                    packageLimit: parseInt(employeeLimit)
+                    packageLimit: parseInt(employeeLimit),
+                    subscription: packageName.toLowerCase()
                 }
             }
             await User.updateOne(filter, updateDoc);

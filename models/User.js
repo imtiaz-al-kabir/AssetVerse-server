@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema(
     profileImage: {
       type: String,
     },
-    // HR Specific Fields
+
     companyName: {
       type: String,
       required: function () {
@@ -41,7 +41,7 @@ const userSchema = new mongoose.Schema(
     },
     packageLimit: {
       type: Number,
-      default: 5, // Default basic package
+      default: 5,
     },
     currentEmployees: {
       type: Number,
@@ -49,7 +49,7 @@ const userSchema = new mongoose.Schema(
     },
     subscription: {
       type: String,
-      default: "basic",
+      default: "free",
     },
   },
   {
