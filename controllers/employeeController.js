@@ -7,7 +7,21 @@ import User from "../models/User.js";
 export const getMyTeam = async (req, res) => {
   try {
     const team = await EmployeeAffiliation.find({ hrId: req.user._id });
-    res.json(team);
+
+    // Populate employee images from User model if not already present
+    const teamWithImages = await Promise.all(
+      team.map(async (member) => {
+        if (!member.employeeImage) {
+          const user = await User.findOne({ email: member.employeeEmail });
+          if (user && user.profileImage) {
+            member.employeeImage = user.profileImage;
+          }
+        }
+        return member;
+      })
+    );
+
+    res.json(teamWithImages);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -43,17 +57,17 @@ export const removeEmployee = async (req, res) => {
 
 export const getTeamForEmployee = async (req, res) => {
   try {
-   
+
 
     let myAffiliations = await EmployeeAffiliation.find({
       employeeEmail: req.user.email,
     });
 
-   
+
     const { hrId } = req.query;
 
     if (!hrId && myAffiliations.length > 0) {
-      
+
       return res.json({ type: "companies", data: myAffiliations });
     } else if (hrId) {
       // Verify I am in this company

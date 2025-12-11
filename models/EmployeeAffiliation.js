@@ -20,6 +20,9 @@ const employeeAffiliationSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    employeeImage: {
+      type: String,
+    },
     hrEmail: {
       type: String,
       required: true,
@@ -37,7 +40,7 @@ const employeeAffiliationSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      default: "active", 
+      default: "active",
     },
   },
   {

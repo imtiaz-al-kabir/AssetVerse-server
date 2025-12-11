@@ -7,7 +7,7 @@ import User from "../models/User.js";
 
 export const createRequest = async (req, res) => {
   try {
-    const { assetId, requestType, note } = req.body; 
+    const { assetId, requestType, note } = req.body;
 
     const asset = await Asset.findById(assetId);
 
@@ -24,8 +24,9 @@ export const createRequest = async (req, res) => {
       assetName: asset.productName,
       assetType: asset.productType,
       requesterName: req.user.name,
-      requesterEmail: req.user.email, 
-      hrEmail: asset.hrEmail, 
+      requesterEmail: req.user.email,
+      requesterImage: req.user.profileImage || "",
+      hrEmail: asset.hrEmail,
       companyName: asset.companyName,
       requestStatus: "pending",
       requestType: requestType || "Request",
@@ -79,7 +80,7 @@ export const getRequests = async (req, res) => {
 
 export const updateRequestStatus = async (req, res) => {
   try {
-    const { status } = req.body; 
+    const { status } = req.body;
     const request = await Request.findById(req.params.id);
 
     if (!request) {
@@ -91,14 +92,14 @@ export const updateRequestStatus = async (req, res) => {
       const asset = await Asset.findById(request.assetId);
       const hrUser = await User.findById(req.user._id);
 
-    
+
       if (asset.availableQuantity <= 0) {
         return res
           .status(400)
           .json({ message: "Asset out of stock, cannot approve." });
       }
 
-      
+
       const isAffiliated = await EmployeeAffiliation.findOne({
         hrId: req.user._id,
         employeeEmail: request.requesterEmail,
@@ -111,7 +112,7 @@ export const updateRequestStatus = async (req, res) => {
             .json({ message: "Package limit reached. Upgrade required." });
         }
 
-       
+
         const employeeUser = await User.findOne({
           email: request.requesterEmail,
         });
@@ -122,6 +123,7 @@ export const updateRequestStatus = async (req, res) => {
             hrId: req.user._id,
             employeeEmail: employeeUser.email,
             employeeName: employeeUser.name,
+            employeeImage: employeeUser.profileImage || "",
             hrEmail: req.user.email,
             companyName: req.user.companyName,
             companyLogo: req.user.companyLogo,
