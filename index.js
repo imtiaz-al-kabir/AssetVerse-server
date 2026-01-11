@@ -21,7 +21,8 @@ app.use(express.json());
 const allowedOrigins = [
   "https://asseetverse.netlify.app",
   "https://asseet-vers-client.vercel.app",
-  
+  "http://localhost:5173",
+];
 
 app.use(
   cors({

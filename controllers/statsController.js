@@ -1,12 +1,11 @@
 import Asset from "../models/Asset.js";
 import Request from "../models/Request.js";
 
-
 export const getHrStats = async (req, res) => {
   try {
     const hrEmail = req.user.email;
 
-  
+
     const returnableCount = await Asset.countDocuments({
       hrEmail,
       productType: "Returnable",

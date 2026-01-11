@@ -14,7 +14,7 @@ export const getAssets = async (req, res) => {
         if (req.user.role === 'hr') {
             filter.hrEmail = req.user.email;
         }
-        
+
 
         // Search logic
         if (search) {
@@ -26,7 +26,7 @@ export const getAssets = async (req, res) => {
             filter.productType = type;
         }
 
- 
+
 
         const assets = await Asset.find(filter)
             .sort({ createdAt: -1 })
@@ -54,8 +54,8 @@ export const createAsset = async (req, res) => {
         const asset = new Asset({
             productName,
             productType,
-            productQuantity, 
-            availableQuantity: productQuantity, 
+            productQuantity,
+            availableQuantity: productQuantity,
             productImage,
             hrEmail: req.user.email,
             companyName: req.user.companyName,
@@ -95,7 +95,7 @@ export const updateAsset = async (req, res) => {
             asset.productType = productType || asset.productType;
             asset.productImage = productImage || asset.productImage;
 
-          
+
             if (productQuantity !== undefined) {
                 const diff = productQuantity - asset.productQuantity;
                 asset.productQuantity = productQuantity;
@@ -111,3 +111,16 @@ export const updateAsset = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
+
+// Get Single Asset by ID
+export const getAssetById = async (req, res) => {
+    try {
+        const asset = await Asset.findById(req.params.id);
+        if (!asset) {
+            return res.status(404).json({ message: "Asset not found" });
+        }
+        res.status(200).json(asset);
+    } catch (error) {
+        res.status(500).json({ message: "Server Error", error: error.message });
+    }
+};
