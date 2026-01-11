@@ -6,26 +6,21 @@ export const getHrStats = async (req, res) => {
     const hrEmail = req.user.email;
 
 
-    const returnableCount = await Asset.countDocuments({
-      hrEmail,
-      productType: "Returnable",
-    });
-    const nonReturnableCount = await Asset.countDocuments({
-      hrEmail,
-      productType: "Non-returnable",
-    });
+    const [returnableCount, nonReturnableCount, topRequests] = await Promise.all([
+      Asset.countDocuments({ hrEmail, productType: "Returnable" }),
+      Asset.countDocuments({ hrEmail, productType: "Non-returnable" }),
+      Request.aggregate([
+        { $match: { hrEmail: hrEmail } },
+        { $group: { _id: "$assetName", count: { $sum: 1 } } },
+        { $sort: { count: -1 } },
+        { $limit: 5 },
+      ]),
+    ]);
 
     const pieData = [
       { name: "Returnable", value: returnableCount },
       { name: "Non-returnable", value: nonReturnableCount },
     ];
-
-    const topRequests = await Request.aggregate([
-      { $match: { hrEmail: hrEmail } },
-      { $group: { _id: "$assetName", count: { $sum: 1 } } },
-      { $sort: { count: -1 } },
-      { $limit: 5 },
-    ]);
 
     const barData = topRequests.map((item) => ({
       name: item._id,
